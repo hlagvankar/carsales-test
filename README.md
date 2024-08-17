@@ -18,7 +18,24 @@ Enable business to predict late invoice payments
 3. To store the final output, we can again make use of S3, as S3 can be used as Data Lake and other systems can easiliy access files on S3 for their purpose
 
 # Current Architecture
-See image current_architecture.png
+![current_architecture](./current_architecture.drawio.png)
+
+**Data Flow Overview**:
+1.	**Source Systems**: The data is stored in AWS Aurora MySQL databases. We will perform periodic extracts from these databases.
+2.	**ETL Process**:  
+o	**Extract**: Pull data from Aurora MySQL using a tool like AWS Data Pipeline, AWS Glue, or a custom Lambda function scheduled to run periodically (e.g., daily, weekly).  
+o	**Transform**: Clean, normalize, and prepare the data for analytics. This may involve joining tables, filtering unnecessary data, and creating derived features.  
+o	**Load**: Store the transformed data in a data warehouse like Amazon Redshift or an S3-based data lake.
+3.	**Data Warehouse/Data Lake**:
+o	Store historical versions of the data, allowing the analysts to query data as of any point in time. Partitioning by date or snapshot version would help in efficiently managing and querying the data.  
+o	For the finance team, ensure the invoice data is loaded into a separate schema or database that is optimized for SQL queries.  
+4.	**Analytics Layer**:
+o	BI Tools: The analysts will access the data through a BI tool like Amazon QuickSight, Tableau, or any SQL-based tool they are comfortable with.  
+
+**Key Architectural Decisions**:  
+•	Batch Processing: Since CDC is not yet enabled, a batch ETL process is appropriate. This will run on a scheduled basis, perhaps daily or weekly, depending on data freshness requirements.  
+•	Data Versioning: Implementing partitioning or using versioned tables to keep snapshots of data over time allows analysts to compare data across different time periods.  
+•	Data Lake vs Data Warehouse: If your data volume is large and varied, consider a data lake on S3. For structured, SQL-friendly querying, use Redshift.  
 
 # Directory Structure
 ```bash 
@@ -97,4 +114,22 @@ Mounts your local output directory to the container’s /app/output directory.
 The name of the Docker image to run.
 
 # Future State Architecture
-Refer image Future State Design.drawio.png
+![Future State Design.drawio](./Future%20State%20Design.drawio.png)
+
+**Enhanced Data Flow with CDC**:
+1.	Source Systems with CDC:  
+o	CDC Events: Once CDC is enabled, changes from the Aurora MySQL databases will be streamed into a Kafka topic.  
+2.	ETL Process:  
+o	Real-time Extract: Consume Kafka topics using a stream processing tool like Apache Flink, Kafka Streams, or AWS Kinesis.  
+o	Transform: Perform transformations on the streaming data. This might include real-time data enrichment, filtering, and normalization.  
+o	Load: Continuously load the transformed data into your data warehouse or data lake.  
+3.	Data Warehouse/Data Lake:  
+o	Same as above, but with more frequent updates due to the near real-time nature of the CDC streams.  
+o	Implement incremental updates rather than full batch loads, reducing the time and resource consumption.  
+4.	Analytics Layer:  
+o	The analytics tools will now see more up-to-date data as the warehouse or data lake is continuously updated with the latest changes.  
+
+**Key Architectural Decisions**:  
+•	Stream Processing: Incorporating a stream processing tool to handle real-time data as it flows in from Kafka will ensure low latency in data availability.  
+•	Data Consistency: Ensure that the data pipeline handles exactly-once processing to avoid duplicates, especially with financial data.  
+•	Schema Evolution: Consider how schema changes in the source database will propagate through Kafka and into your downstream systems.  
