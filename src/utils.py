@@ -6,12 +6,13 @@ def create_spark_session():
         .getOrCreate()
 
 def read_csv(spark, file_path):
-    return spark.read.csv(file_path, header=True, inferSchema=True)
+    return spark.read.option("inferSchema", "true") \
+                    .option("header", "true") \
+                    .option("quote", '"') \
+                    .option("escape", '"') \
+                    .option("multiline", "true") \
+                    .csv(file_path)
 
-def write_output(df, output_dir, format='parquet'):
-    if format == 'csv':
-        df.write.mode("overwrite").csv(output_dir)
-    elif format == 'parquet':
-        df.write.mode("overwrite").parquet(output_dir)
-    else:
-        print(f"Unknown output file format specified. {format}")
+def write_output(df, output_dir):
+    df.write.mode("overwrite").csv(output_dir, header=True)
+    df.write.mode("overwrite").parquet(output_dir)
