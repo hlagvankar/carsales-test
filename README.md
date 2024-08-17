@@ -26,7 +26,7 @@ Enable business to predict late invoice payments
 o	**Extract**: Pull data from Aurora MySQL using a tool like AWS Data Pipeline, AWS Glue, or a custom Lambda function scheduled to run periodically (e.g., daily, weekly).  
 o	**Transform**: Clean, normalize, and prepare the data for analytics. This may involve joining tables, filtering unnecessary data, and creating derived features.  
 o	**Load**: Store the transformed data in a data warehouse like Amazon Redshift or an S3-based data lake.
-3.	**Data Warehouse/Data Lake**:
+3.	**Data Warehouse/Data Lake**:  
 o	Store historical versions of the data, allowing the analysts to query data as of any point in time. Partitioning by date or snapshot version would help in efficiently managing and querying the data.  
 o	For the finance team, ensure the invoice data is loaded into a separate schema or database that is optimized for SQL queries.  
 4.	**Analytics Layer**:
