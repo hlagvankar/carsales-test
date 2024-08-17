@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, lit, sum as spark_sum, when, datediff, current_date
+from pyspark.sql.functions import col, lit, sum as spark_sum, when, datediff, current_date, regexp_replace
 
 def transform_data(accounts, invoices, invoice_line_items, skus, logger):
     # Do sanity checks on dataframes
@@ -36,7 +36,7 @@ def transform_data(accounts, invoices, invoice_line_items, skus, logger):
         logger.info(invoices.show())
 
         # Assume a standard payment term of 30 days
-        payment_due_days = 28
+        payment_due_days = 30
 
         # Calculate the number of days since the invoice was issued
         invoices = invoices.withColumn(
@@ -62,6 +62,11 @@ def transform_data(accounts, invoices, invoice_line_items, skus, logger):
 
         logger.info(f"Aggregate late payment information by account")
         logger.info(late_payments_summary_df.show())
+        
+        # Clean Accounts DF for company address appearing on multiline
+        accounts = accounts.withColumn("cleaned_company_address", regexp_replace("company_address", r"[\r\n]+", " ")) \
+                           .drop("company_address") \
+                           .withColumnRenamed("cleaned_company_address", "company_address")
         
         # Join with accounts to get customer details
         final_df = late_payments_summary_df.join(accounts, "account_id")

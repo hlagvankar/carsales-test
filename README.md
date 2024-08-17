@@ -82,6 +82,10 @@ docker build -t etl-pipeline .
 ```bash
 docker run --rm -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output etl-pipeline
 ```
+To run in windows powershell
+```bash
+docker run --rm -v ${PWD}/data:/app/data -v ${PWD}/output:/app/output etl-pipeline
+```
 
 1. --rm:  
 Automatically remove the container when it exits.

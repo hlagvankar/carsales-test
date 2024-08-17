@@ -19,8 +19,8 @@ def read_csv(spark, file_path):
 
 def write_output(df, output_dir, logger):
     try:
-        df.write.mode("overwrite").csv(output_dir, header=True)
-        df.write.mode("overwrite").parquet(output_dir)
+        df.write.mode("overwrite").csv(output_dir + "/csv", header=True)
+        df.write.mode("overwrite").parquet(output_dir + "/parquet")
     except Exception as e:
         logger.error(f"Error writing data: {e}")
         raise
