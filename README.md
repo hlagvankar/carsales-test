@@ -92,3 +92,5 @@ Mounts your local output directory to the container’s /app/output directory.
 4. etl-pipeline:  
 The name of the Docker image to run.
 
+# Future State Architecture
+Refer image Future State Design.drawio.png
