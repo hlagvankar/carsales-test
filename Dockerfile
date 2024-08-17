@@ -35,4 +35,4 @@ ENV PYSPARK_DRIVER_PYTHON=python3
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run etl_job.py when the container launches
-CMD ["spark-submit", "src/etl_job.py", "--input_dir", "data", "--output_dir", "output"]
+CMD ["spark-submit", "src/etl_pipeline.py", "--input_dir", "data", "--output_dir", "output"]

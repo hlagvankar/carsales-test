@@ -9,7 +9,8 @@ Enable business to predict late invoice payments
 * **Spark**: Spark is popular and widely used for its ability to handle large-scale data sets processing and its built-in support for distributed computing.  
 * **Data Storage**: Parquet, again widely popular and efficient for querying datasets and provides good compression  
 * **Incremental Processing**: Enhance the pipeline to process only new or changed data in each run, making it scalable for larger datasets  
-* **Partitioning**: We can partition the output based on date or any key which is frequently used in Filter criteria while querying dataset.
+* **Partitioning**: We can partition the output based on date or any key which is frequently used in Filter criteria while querying dataset.  
+* **EMR**: We can use auto-scaling group to dynamically allocate resources based on workload.
 
 # Intermediate Data Models
 1. We can store raw datasets on S3 because of number of benefits S3 offers such as Durability, Cost Effectiveness, Scalability etc.
