@@ -3,9 +3,7 @@ This repository contains a Spark-based ETL pipeline designed to process raw data
 
 
 # Problem Statement  
-Enable business to know  
-1. Number of days an invoice is past due  
-2. Total amount of unpaid invoices for each account
+Enable business to predict late invoice payments
 
 # Design Consideration and Scalability
 * **Spark**: Spark is popular and widely used for its ability to handle large-scale data sets processing and its built-in support for distributed computing.  
@@ -22,10 +20,29 @@ Enable business to know
 See image current_architecture.png
 
 # Directory Structure
-data/: Directory containing input CSV files.  
-output/: Directory where processed data will be stored.  
-src/: Directory containing the ETL Spark job script.  
-README.md: This documentation file.  
+```bash 
+carsales_etl/  
+│  
+├── data/  
+|   |── accounts.csv  
+│   ├── invoices.csv  
+│   ├── invoice_line_items.csv  
+│   └── skus.csv  
+│  
+├── src/  
+│   ├── etl_pipeline.py  
+│   ├── utils.py  
+│   └── __init__.py  
+│  
+├── requirements.txt  
+└── Dockerfile  
+```
+
+* `data/`: Directory containing input CSV files.  
+* `output/`: Directory where processed data will be stored.  
+* `src/`: Directory containing the ETL Spark job script and other helper functions.  
+* `README.md`: This documentation file.  
+* `Dockerfile`: To build and run the image
 
 # Requirements
 Python 3.x  

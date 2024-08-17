@@ -1,12 +1,11 @@
 import argparse
 
-from spark_commons import get_spark_session
 from transform import transform_data
 from load import load_data
-from helper import save_data
+from utils import *
 
 def main(input_dir, output_dir):
-    spark = get_spark_session()
+    spark = create_spark_session()
     
     # Load the data
     accounts_df, skus_df, invoices_df, invoice_line_items_df = load_data(spark, input_dir)
@@ -15,7 +14,7 @@ def main(input_dir, output_dir):
     account_features_df = transform_data(accounts_df, skus_df, invoices_df, invoice_line_items_df)
     
     # Save the transformed data
-    save_data(account_features_df, output_dir)
+    write_output(account_features_df, output_dir)
     
     spark.stop()
 

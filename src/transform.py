@@ -1,20 +1,20 @@
-from pyspark.sql.functions import col, datediff, current_date, sum, avg
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, lit, sum as spark_sum
+from pyspark.sql.types import IntegerType, DateType
 
-def transform_data(accounts_df, skus_df, invoices_df, invoice_line_items_df):
-    # Join the DataFrames
-    invoice_details_df = invoices_df.join(invoice_line_items_df, 'invoice_id') \
-                                    .join(accounts_df, 'account_id') \
-                                    .join(skus_df, 'sku_id')
-
-    # Calculate days past due
-    invoice_details_df = invoice_details_df.withColumn(
-        'days_past_due', datediff(current_date(), col('due_date'))
-    )
-
-    # Aggregate data by account
-    account_features_df = invoice_details_df.groupBy('account_id').agg(
-        sum('amount_due').alias('total_outstanding_balance'),
-        avg('days_past_due').alias('avg_payment_delay')
-    )
+def transform_data(accounts, invoices, invoice_line_items, skus):
+    # Join invoice_line_items with skus to get product details
+    invoice_items_with_sku = invoice_line_items.join(skus, "item_id")
     
-    return account_features_df
+    # Calculate total cost per invoice
+    invoice_totals = invoice_items_with_sku.groupBy("invoice_id") \
+                        .agg(spark_sum("item_cost_price").alias("total_cost"))
+    
+    # Join with invoices to get full invoice data
+    invoices = invoices.join(invoice_totals, "invoice_id") \
+                        .withColumnRenamed("date_issued", "invoice_date")
+    
+    # Join with accounts to get customer details
+    final_df = invoices.join(accounts, "account_id")
+    
+    return final_df
