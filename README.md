@@ -29,7 +29,7 @@ o	**Load**: Store the transformed data in a data warehouse like Amazon Redshift 
 3.	**Data Warehouse/Data Lake**:  
 o	Store historical versions of the data, allowing the analysts to query data as of any point in time. Partitioning by date or snapshot version would help in efficiently managing and querying the data.  
 o	For the finance team, ensure the invoice data is loaded into a separate schema or database that is optimized for SQL queries.  
-4.	**Analytics Layer**:
+4.	**Analytics Layer**:  
 o	BI Tools: The analysts will access the data through a BI tool like Amazon QuickSight, Tableau, or any SQL-based tool they are comfortable with.  
 
 **Key Architectural Decisions**:  
@@ -39,7 +39,7 @@ o	BI Tools: The analysts will access the data through a BI tool like Amazon Quic
 
 # Directory Structure
 ```bash 
-carsales_etl/  
+carsales_test/  
 │  
 ├── data/  
 |   |── accounts.csv  
@@ -49,6 +49,8 @@ carsales_etl/
 │  
 ├── src/  
 │   ├── etl_pipeline.py  
+│   ├── load.py  
+│   ├── transform.py  
 │   ├── utils.py  
 │   └── __init__.py  
 │  
@@ -71,8 +73,8 @@ PySpark
 1. Clone the Repository:
 
     ```bash 
-    git clone <repository-url>
-    cd <repository-directory>
+    git clone https://github.com/hlagvankar/carsales-test.git
+    cd https://github.com/hlagvankar/carsales-test.git
     ```
 
 2. Install Dependencies:
@@ -120,7 +122,7 @@ The name of the Docker image to run.
 1.	Source Systems with CDC:  
 o	CDC Events: Once CDC is enabled, changes from the Aurora MySQL databases will be streamed into a Kafka topic.  
 2.	ETL Process:  
-o	Real-time Extract: Consume Kafka topics using a stream processing tool like Apache Flink, Kafka Streams, or AWS Kinesis.  
+o	Real-time Extract: Consume Kafka topics using a stream processing tool like Kafka Streams or AWS Kinesis.  
 o	Transform: Perform transformations on the streaming data. This might include real-time data enrichment, filtering, and normalization.  
 o	Load: Continuously load the transformed data into your data warehouse or data lake.  
 3.	Data Warehouse/Data Lake:  
