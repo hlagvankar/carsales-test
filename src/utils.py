@@ -17,10 +17,14 @@ def read_csv(spark, file_path):
                     .option("multiline", "true") \
                     .csv(file_path)
 
-def write_output(df, output_dir, logger):
+def write_output(df, output_dir, feature_type, logger):
+    if df is None:
+        logger.error(f"DataFrame for {feature_type} is None. Cannot write output.")
+        raise ValueError(f"DataFrame for {feature_type} is None.")
+    
     try:
-        df.write.mode("overwrite").csv(output_dir + "/csv", header=True)
-        df.write.mode("overwrite").parquet(output_dir + "/parquet")
+        df.write.mode("overwrite").csv(output_dir + f"/csv/{feature_type}", header=True)
+        df.write.mode("overwrite").parquet(output_dir + f"/parquet/{feature_type}")
     except Exception as e:
         logger.error(f"Error writing data: {e}")
         raise

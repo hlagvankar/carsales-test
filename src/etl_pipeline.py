@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from transform import transform_data
+from transform import *
 from load import load_data
 from utils import *
 
@@ -24,12 +24,22 @@ def main(input_dir, output_dir):
         logger.info(invoices_df.show())
         logger.info(invoice_line_items_df.show())
         
+        # Perform sanity checks on Datasets before transforming
+        perform_sanity_checks(accounts_df, invoices_df, invoice_line_items_df, skus_df, logger)
         # Transform the data
-        account_features_df = transform_data(accounts_df, invoices_df, invoice_line_items_df, skus_df, logger)
+        late_payment_df = get_late_payment_data(accounts_df, invoices_df, invoice_line_items_df, skus_df, logger)
+
+        # Get Types Of SKUs purchased by each account
+        product_mix = get_skus_for_accounts(accounts_df, invoices_df, invoice_line_items_df, skus_df, logger)
         
         # Save the transformed data
         logger.info(f"Writing output to {output_dir} directory in CSV and Parquet formats...")
-        write_output(account_features_df, output_dir, logger)
+        write_output(late_payment_df, output_dir, "late_payment", logger)
+
+        # Save product_mix data
+        logger.info(f"Writing product_mix output to {output_dir} directory in CSV and Parquet formats...")
+        write_output(product_mix, output_dir, "product_mix", logger)
+
     except Exception as e:
         logger.critical(f"ETL pipeline failed: {e}")
         sys.exit(1)    

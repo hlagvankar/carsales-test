@@ -3,7 +3,26 @@ This repository contains a Spark-based ETL pipeline designed to process raw data
 
 
 # Problem Statement  
-Enable business to predict late invoice payments
+Enable business to know 
+1. Late invoice payments
+2. Types of SKUs purchased by each account
+
+# Logic
+Assumption: A standard payment term of 30 days  
+**Feature: Late Payment**
+1. Load all the input datasets
+2. Join invoice_line_items with skus to get product details
+3. Calculate total cost per invoice
+4. Calculate the number of days since the invoice was issued
+5. Determine if an invoice is late
+6. Aggregate late payment information by account
+7. Join with accounts dataset to get customer details
+
+**Feature: Product Mix**
+1. Load all the input datasets
+2. Join all the input datasets on respective join column
+3. Aggregate item_name by grouping account_id, company_name
+4. While writing to CSV, convert array column to string column
 
 # Design Consideration and Scalability
 * **Spark**: Spark is popular and widely used for its ability to handle large-scale data sets processing and its built-in support for distributed computing.  
@@ -93,7 +112,8 @@ PySpark
     &emsp; invoice_line_items.csv  
 
 # Running the ETL Job
-I have used Docker for portability. To run the ETL job, use the following command:
+I have used Docker for portability, so make sure Docker is installed on your machine.  
+To build & run the ETL job, use the following command:
 
 ```bash 
 docker build -t etl-pipeline .
