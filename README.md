@@ -164,4 +164,11 @@ o	The analytics tools will now see more up-to-date data as the warehouse or data
 * Change ETL pipeline to read/write files from S3
 * Add unit tests
 
-# Output of Docker Run Commant
+# Outputs
+## Docker Build
+![Docker Build Command Output](./docs/Docker%20Image%20Build%20Output.jpg)
+## Docker Run
+![output2](./docs/Intermediate_Output_Spark.jpg)
+![output3](./docs/Spark_Output_1.jpg)
+![output4](./docs/Spark_job_Finished.jpg)
+![output5](./docs/Spark_output_Files.jpg)
