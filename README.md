@@ -83,6 +83,9 @@ carsales_test/
 * `README.md`: This documentation file.  
 * `Dockerfile`: To build and run the image
 
+# Entity Relationships Diagram
+![ERD](./docs/ERD.drawio.png)
+
 # Requirements
 Python 3.x  
 Apache Spark (preferably version 3.x)  
@@ -155,3 +158,8 @@ o	The analytics tools will now see more up-to-date data as the warehouse or data
 •	Stream Processing: Incorporating a stream processing tool to handle real-time data as it flows in from Kafka will ensure low latency in data availability.  
 •	Data Consistency: Ensure that the data pipeline handles exactly-once processing to avoid duplicates, especially with financial data.  
 •	Schema Evolution: Consider how schema changes in the source database will propagate through Kafka and into your downstream systems.  
+
+
+# TO DO
+* Change ETL pipeline to read/write files from S3
+* Add unit tests
