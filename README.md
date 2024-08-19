@@ -163,3 +163,5 @@ o	The analytics tools will now see more up-to-date data as the warehouse or data
 # TO DO
 * Change ETL pipeline to read/write files from S3
 * Add unit tests
+
+# Output of Docker Run Commant

@@ -1,4 +1,6 @@
 from pyspark.sql import SparkSession
+import sys
+import logging
 
 def create_spark_session(logger):
     try:
@@ -23,8 +25,17 @@ def write_output(df, output_dir, feature_type, logger):
         raise ValueError(f"DataFrame for {feature_type} is None.")
     
     try:
-        df.write.mode("overwrite").csv(output_dir + f"/csv/{feature_type}", header=True)
+        df.coalesce(1).write.mode("overwrite").csv(output_dir + f"/csv/{feature_type}", header=True)
         df.write.mode("overwrite").parquet(output_dir + f"/parquet/{feature_type}")
     except Exception as e:
         logger.error(f"Error writing data: {e}")
         raise
+
+def setup_logger():
+    logger = logging.getLogger(__name__)
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    return logger    

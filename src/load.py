@@ -14,6 +14,12 @@ def load_data(spark, input_dir, logger):
                                                           os.path.join(input_dir, 'invoice_line_items.csv')]):
             raise FileNotFoundError("One or more input files are missing")
         
+        # Validate loaded data
+        if accounts_df is None or invoices_df is None or invoice_line_items_df is None or skus_df is None:
+            raise ValueError("One or more input files failed to load.")
+        
+        logger.info("Data loaded successfully.")
+        
         return accounts_df, skus_df, invoices_df, invoice_line_items_df
     except Exception as e:
         logger.error(f"Error loading data: {e}")

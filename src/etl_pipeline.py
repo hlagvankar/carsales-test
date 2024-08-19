@@ -6,13 +6,11 @@ from transform import *
 from load import load_data
 from utils import *
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 
 def main(input_dir, output_dir):
     spark = None
+    logger = setup_logger()
+
     try:
         spark = create_spark_session(logger)
         
@@ -53,8 +51,6 @@ if __name__ == "__main__":
     parser.add_argument('--output_dir', required=True, help='Output directory for processed data')
     
     args = parser.parse_args()
-    logger.info(f"Using Input Dir - ${args.input_dir}")
-    logger.info(f"Using Output Dir - ${args.output_dir}")
 
     main(args.input_dir, args.output_dir)
     
