@@ -37,7 +37,7 @@ Assumption: A standard payment term of 30 days
 3. To store the final output, we can again make use of S3, as S3 can be used as Data Lake and other systems can easiliy access files on S3 for their purpose
 
 # Current Architecture
-![current_architecture](./current_architecture.drawio.png)
+![current_architecture](./docs/current_architecture.drawio.png)
 
 **Data Flow Overview**:
 1.	**Source Systems**: The data is stored in AWS Aurora MySQL databases. We will perform periodic extracts from these databases.
@@ -136,7 +136,7 @@ Mounts your local output directory to the container’s /app/output directory.
 The name of the Docker image to run.
 
 # Future State Architecture
-![Future State Design.drawio](./Future%20State%20Design.drawio.png)
+![Future State Design.drawio](./docs/Future%20State%20Design.drawio.png)
 
 **Enhanced Data Flow with CDC**:
 1.	Source Systems with CDC:  
